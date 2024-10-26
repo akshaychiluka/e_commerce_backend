@@ -34,9 +34,9 @@ enum Pay_Status{
 model user{
     id Int @id @default(autoincrement())
     username String @unique
-    email String 
+    email String @unique
     password String
-    address Json
+    address Json?
     created_at DateTime @default(now())
     role Role @default(USER)
     orders orders[]
