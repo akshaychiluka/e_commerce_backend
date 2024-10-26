@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+enum Role{
+  USER 
+  ADMIN
+}
+enum Status{
+  PENDING
+  SHIPPED
+  DELIVERED
+}
+enum Pay{
+  CARD
+  UPI
+  COD
+}
+enum Pay_Status{
+  SUCCESSFUL
+  FAILED
+}
+
+model user{
+    id Int @id @default(autoincrement())
+    username String @unique
+    email String 
+    password String
+    address Json
+    created_at DateTime @default(now())
+    role Role @default(USER)
+    orders orders[]
+    cart cart?
+
+}
+model product{
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Int
+  stock Int
+  created_at DateTime @default(now())
+  order_item order_item[]
+  cart_items cart_item[]
+  category_id Int?
+  category category? @relation(fields: [category_id],references: [id])
+}
+model category{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  product product[]
+
+}
+model cart{
+  id Int @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user_id Int @unique
+  user user @relation(fields: [user_id],references: [id])
+  cart_item cart_item[]
+}
+model cart_item{
+  id Int @id @default(autoincrement())
+  quantity Int
+  cart_id Int
+  product_id Int
+  product product @relation(fields: [product_id],references: [id])
+  cart cart @relation(fields: [cart_id],references: [id])
+}
+model orders{
+  id Int @id @default(autoincrement())
+  status Status @default(PENDING)
+  total_price Int 
+  created_at DateTime @default(now())
+  user_id Int
+  user user @relation(fields: [user_id],references: [id])
+  order_items order_item[] 
+  payment payment?
+}
+model order_item{
+  id Int @id @default(autoincrement())
+  quantity Int
+  price Int
+  order_id Int
+  product_id Int
+  orders orders @relation(fields: [order_id],references: [id],onDelete: Cascade) 
+  product product @relation(fields: [product_id],references: [id],onDelete: Cascade)
+}
+model payment{
+  id Int @id @default(autoincrement())
+  payment_method Pay
+  amount Int
+  status Pay_Status
+  transaction_id String
+  created_at DateTime @default(now())
+  order_id Int @unique
+  order orders @relation(fields: [order_id],references: [id])
+}
