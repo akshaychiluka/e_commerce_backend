@@ -1,58 +1,58 @@
-1. User Table (user_table)
-id: Primary key
-username: Unique, required for login
-email: Unique, for communication and authentication
-password: Hashed, for secure authentication
-address: JSON, containing multiple addresses for delivery
-created_at: Date the account was created
-role: Role type, such as customer or admin (for admin control)
-Relations: Connects to orders (one-to-many), cart (one-to-one)
-2. Product Table (product_table)
-id: Primary key
-name: Name of the product
-description: Details about the product
-price: Numeric, price of the product
-stock: Quantity available
-category_id: Foreign key to category_table
-created_at: Date product was added
-Relations: Links to category_table (many-to-one), order_items (many-to-many through order_items_table)
-3. Category Table (category_table)
-id: Primary key
-name: Name of the category (e.g., Electronics, Clothing)
-description: Brief description of the category
-Relations: Connects to product_table (one-to-many)
-4. Cart Table (cart_table)
-id: Primary key
-user_id: Foreign key to user_table, associates the cart with a user
-created_at: Date when cart was created
-updated_at: Date when cart was last updated
-Relations: Connects to user_table (one-to-one), cart_items_table (one-to-many)
-5. Cart Items Table (cart_items_table)
-id: Primary key
-cart_id: Foreign key to cart_table
-product_id: Foreign key to product_table
-quantity: Number of units of the product
-Relations: Links to cart_table and product_table (many-to-one)
-6. Orders Table (orders_table)
-id: Primary key
-user_id: Foreign key to user_table
-status: Status of the order (e.g., pending, shipped, delivered)
-total_price: Total amount for the order
-created_at: Date the order was placed
-Relations: Connects to user_table (many-to-one), order_items_table (one-to-many)
-7. Order Items Table (order_items_table)
-id: Primary key
-order_id: Foreign key to orders_table
-product_id: Foreign key to product_table
-quantity: Number of products in this order item
-price: Price of the product at the time of order
-Relations: Links to orders_table and product_table (many-to-many)
-8. Payment Table (payment_table)
-id: Primary key
-order_id: Foreign key to orders_table
-payment_method: Method of payment (e.g., card, PayPal)
-amount: Total payment amount
-status: Status of the payment (e.g., successful, failed)
-transaction_id: Unique identifier for the payment transaction
-created_at: Date the payment was made
-Relations: Connects to orders_table
+1. User Table (user_table):
+  id: Primary key
+  username: Unique, required for login
+  email: Unique, for communication and authentication
+  password: Hashed, for secure authentication
+  address: JSON, containing multiple addresses for delivery
+  created_at: Date the account was created
+  role: Role type, such as customer or admin (for admin control)
+  Relations: Connects to orders (one-to-many), cart (one-to-one)
+2. Product Table (product_table):
+  id: Primary key
+  name: Name of the product
+  description: Details about the product
+  price: Numeric, price of the product
+  stock: Quantity available
+  category_id: Foreign key to category_table
+  created_at: Date product was added
+  Relations: Links to category_table (many-to-one), order_items (many-to-many through order_items_table)
+3. Category Table (category_table):
+  id: Primary key
+  name: Name of the category (e.g., Electronics, Clothing)
+  description: Brief description of the category
+  Relations: Connects to product_table (one-to-many)
+4. Cart Table (cart_table):
+  id: Primary key
+  user_id: Foreign key to user_table, associates the cart with a user
+  created_at: Date when cart was created
+  updated_at: Date when cart was last updated
+  Relations: Connects to user_table (one-to-one), cart_items_table (one-to-many)
+5. Cart Items Table (cart_items_table):
+  id: Primary key
+  cart_id: Foreign key to cart_table
+  product_id: Foreign key to product_table
+  quantity: Number of units of the product
+  Relations: Links to cart_table and product_table (many-to-one)
+6. Orders Table (orders_table):
+  id: Primary key
+  user_id: Foreign key to user_table
+  status: Status of the order (e.g., pending, shipped, delivered)
+  total_price: Total amount for the order
+  created_at: Date the order was placed
+  Relations: Connects to user_table (many-to-one), order_items_table (one-to-many)
+7. Order Items Table (order_items_table):
+  id: Primary key
+  order_id: Foreign key to orders_table
+  product_id: Foreign key to product_table
+  quantity: Number of products in this order item
+  price: Price of the product at the time of order
+  Relations: Links to orders_table and product_table (many-to-many)
+8. Payment Table (payment_table):
+  id: Primary key
+  order_id: Foreign key to orders_table
+  payment_method: Method of payment (e.g., card, PayPal)
+  amount: Total payment amount
+  status: Status of the payment (e.g., successful, failed)
+  transaction_id: Unique identifier for the payment transaction
+  created_at: Date the payment was made
+  Relations: Connects to orders_table
