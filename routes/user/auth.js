@@ -1,11 +1,12 @@
 const express=require("express")
 const {PrismaClient}=require("@prisma/client")
 const prisma= new PrismaClient()
+require('dotenv').config();
 
 const router=express.Router()
 const bcrypt = require("bcrypt");
 const jwt=require('jsonwebtoken');
-const secretKey="ushhhhhh";
+const secretKey=process.env.secretKey;
 
 
 router.post("/signup",async (req,res)=>{
@@ -38,7 +39,7 @@ router.post("/signin",async (req,res)=>{
             }
         })
         if(!user||await bcrypt.compare(user.password,password)){
-            res.status(404).json({error:"Invalid username or password"})
+            return res.status(404).json({error:"Invalid username or password"})
         }
         const token=jwt.sign({user_id:user.id},secretKey);
         res.status(200).json({
@@ -50,17 +51,5 @@ router.post("/signin",async (req,res)=>{
         res.status(500).json({ error: "Internal server error" });
     }
 })
-
-function authenticateToken(req,res,next){
-    const token=req.headers["autherization"];
-    jwt.verify(token,secretKey,(err,user)=>{
-        if(err){
-            return  res.status(403).json({ error: "Invalid token" });
-        }
-        req.user=user;
-        next();
-    });
-}
-
 
 module.exports=router;
